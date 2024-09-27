@@ -147,14 +147,31 @@
                 
                 contenidoTicket += `</ul><p>Total: ${divisa}${calcularTotal()}</p><p>¡Gracias por su compra!</p></div>`;
                 
-                // Guardar el contenido original de la página
-                const contenidoOriginal = document.body.innerHTML;
-
                 // Cambiar el contenido de la página para mostrar el ticket
                 document.body.innerHTML = contenidoTicket;
 
                 // Imprimir el contenido del ticket
-                window.print();
+                //window.print();
+                // Crear un archivo de texto con el contenido del ticket
+                const blob = new Blob([contenidoTicket], { type: 'text/html' });
+
+                // Crear un enlace para descargar el archivo
+                const enlace = document.createElement('a');
+                enlace.href = URL.createObjectURL(blob);
+
+                // Obtener la fecha y hora actual
+                const fechaActual = new Date();
+                const fechaFormateada = fechaActual.toISOString().replace(/:/g, '-').split('.')[0];
+
+
+                enlace.download = 'Descargas\\ticket_'+fechaFormateada+'.html'; // Nombre del archivo
+                document.body.appendChild(enlace);
+
+                // Ejecutar la descarga
+                enlace.click();
+
+                // Opcional: eliminar el enlace después de la descarga
+                document.body.removeChild(enlace);
 
                 // Regresar el contenido original a la página
                 location.reload(true);
